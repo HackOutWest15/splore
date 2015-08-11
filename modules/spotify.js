@@ -1,9 +1,8 @@
-var mongo = require('mongodb');
-var db = require('monk')('localhost:27017/splore');
+var db = require('promised-mongo')('splore');
 var Spotify = require('spotify-web-api-node');
 var Utils = require('../utils');
 
-var Users = db.get('users');
+var Users = db.collection('users');
 
 var storedState = Utils.generateRandomString();
 var scopes = ['playlist-modify-public'];
@@ -19,6 +18,10 @@ var Constructor = function() {
         redirectUri: 'http://localhost:3000/callback'
       });
     }
+  };
+
+  var createPlaylist = function(username) {
+    return client.createPlaylist(username, 'Splore', { public: true });
   };
 
   init();
@@ -41,8 +44,23 @@ var Constructor = function() {
 
       return client.getMe()
         .then(function(data) {
-          return Users.insert({username: data.body.id});
-        });
+          var username = data.body.id;
+
+          return Users.findOne({username: username})
+            .then(function(user) {
+              if(user) {
+                return user;
+              }
+
+              return createPlaylist(username)
+                .then(function(data) {
+                  return Users.save({
+                    username: data.body.owner.id,
+                    playlistId: data.body.id
+                  });
+                });
+            })
+        })
     }
   };
 };

@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(sassMiddleware({
     src: path.join(__dirname, 'stylesheets'),
     dest: path.join(__dirname, 'public', 'css'),
-    debug: true,
+    debug: false,
     prefix: '/css',
     outputStyle: 'compressed'
 }));

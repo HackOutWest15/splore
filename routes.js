@@ -26,9 +26,6 @@ router.get('/playlist', function(req, res) {
     return res.redirect('/');
   }
 
-  Spotify.client.getMe().then(function(data) {
-    console.log("id", data.body.id);
-  });
   res.render('playlist');
 });
 
