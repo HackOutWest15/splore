@@ -1,7 +1,7 @@
 var router = require('express').Router();
 var querystring = require('querystring');
 var request = require('request');
-var utils = require('./utils');
+var Utils = require('./utils');
 
 var storedState = Utils.generateRandomString();
 
