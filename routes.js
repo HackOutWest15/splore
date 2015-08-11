@@ -1,30 +1,34 @@
 var router = require('express').Router();
 var querystring = require('querystring');
-var Utils = require('./utils');
-var Spotify = require('spotify-web-api-node');
 
-var storedState = Utils.generateRandomString();
-var scopes = ['playlist-modify-public'];
+var Spotify = require('./modules/spotify');
 
-var client;
+var checkAuth = function(req, res, next) {
+  if(Spotify.client.authed) {
+    console.log('authed');
+    res.redirect('/playlist');
+  } else {
+    console.log('not authed');
+    next();
+  }
+};
 
-router.get('/', function(req, res) {
+router.get('/', checkAuth, function(req, res) {
   res.render('index');
 });
 
-router.get('/login', function (req, res) {
-
-  client = new Spotify({
-    clientId: process.env.SPOTIFY_CLIENT_ID,
-    clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-    redirectUri: req.protocol + '://' + req.get('Host') + '/callback'
-  });
-
-  var url = client.createAuthorizeURL(scopes, storedState);
-  res.redirect(url);
+router.get('/login', checkAuth, function (req, res) {
+  res.redirect(Spotify.auth());
 });
 
 router.get('/playlist', function(req, res) {
+  if(!Spotify.client.authed) {
+    return res.redirect('/');
+  }
+
+  Spotify.client.getMe().then(function(data) {
+    console.log("id", data.body.id);
+  });
   res.render('playlist');
 });
 
@@ -33,15 +37,17 @@ router.get('/callback', function (req, res) {
   var state = req.query.state;
   var code = req.query.code;
   
-  if (state === null || state !== storedState) {
+  if (state === null || state !== Spotify.state) {
     res.redirect('/' +
       querystring.stringify({
         error: 'state_mismatch'
       }));
   } else {
-    client.authorizationCodeGrant(code).then(function(data) {
-      console.log(data.body);
-      res.redirect('/playlist');
+    
+    Spotify.client.authorizationCodeGrant(code).then(function(data) {
+      Spotify.createUser(data.body).then(function() {
+        res.redirect('/playlist');
+      });
     });
   }
 });
