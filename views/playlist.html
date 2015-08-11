@@ -8,4 +8,18 @@
 
   <a href="#" class="btn btn--banner">Enjoy at Spotify</a>
 
+  <script type="text/javascript">
+    // if('Android' in window) {
+      // var id = Android.getId();
+      var id = 'tomassellden';
+      var username = '{{ username }}';
+      var http = new XMLHttpRequest();
+
+      var params = 'phoneId=' + id;
+      
+      http.open('POST', '/users/' + username + '/setPhoneId', true);
+      http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      http.send(params);
+    // }
+  </script>
 {% endblock %}

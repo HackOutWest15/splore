@@ -1,6 +1,9 @@
 var router = require('express').Router();
 var querystring = require('querystring');
 
+var db = require('promised-mongo')('splore');
+var Users = db.collection('users');
+
 var Spotify = require('./modules/spotify');
 
 var checkAuth = function(req, res, next) {
@@ -21,12 +24,28 @@ router.get('/login', checkAuth, function (req, res) {
   res.redirect(Spotify.auth());
 });
 
-router.get('/playlist', function(req, res) {
+router.post('/users/:username/setPhoneId', function(req, res) {
+  var id = req.body.phoneId;
+  var username = req.params.username;
+
+  Users.update({username: username}, {$set: {
+    phoneId: id
+  }})
+  .then(function() {
+    res.json({status: 'ok'});
+  });
+});
+
+router.get('/playlist/:username', function(req, res) {
   if(!Spotify.client.authed) {
     return res.redirect('/');
   }
 
-  res.render('playlist');
+  var username = req.params.username;
+
+  Users.findOne({username: username}).then(function(user) {
+    res.render('playlist', user);
+  });
 });
 
 router.get('/callback', function (req, res) {
@@ -42,8 +61,8 @@ router.get('/callback', function (req, res) {
   } else {
     
     Spotify.client.authorizationCodeGrant(code).then(function(data) {
-      Spotify.createUser(data.body).then(function() {
-        res.redirect('/playlist');
+      Spotify.createUser(data.body).then(function(user) {
+        res.redirect('/playlist/' + user.username);
       });
     });
   }

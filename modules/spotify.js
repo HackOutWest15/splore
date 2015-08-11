@@ -1,7 +1,7 @@
-var db = require('promised-mongo')('splore');
 var Spotify = require('spotify-web-api-node');
 var Utils = require('../utils');
 
+var db = require('promised-mongo')('splore');
 var Users = db.collection('users');
 
 var storedState = Utils.generateRandomString();
@@ -49,11 +49,14 @@ var Constructor = function() {
           return Users.findOne({username: username})
             .then(function(user) {
               if(user) {
+                client.username = user.username;
                 return user;
               }
 
               return createPlaylist(username)
                 .then(function(data) {
+                  client.username = data.body.owner.id;
+
                   return Users.save({
                     username: data.body.owner.id,
                     playlistId: data.body.id
