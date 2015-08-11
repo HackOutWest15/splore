@@ -3,6 +3,7 @@ var app = express();
 var swig = require('swig');
 var bodyParser = require('body-parser');
 var path = require('path');
+var sassMiddleware = require('node-sass-middleware');
 
 var mongo = require('mongodb');
 var monk = require('monk');
@@ -18,6 +19,15 @@ swig.setDefaults({ cache: false });
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(sassMiddleware({
+    src: path.join(__dirname, 'stylesheets'),
+    dest: path.join(__dirname, 'public', 'css'),
+    debug: true,
+    prefix: '/css',
+    outputStyle: 'compressed'
+}));
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(function(req,res,next){
     req.db = db;
