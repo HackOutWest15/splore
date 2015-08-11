@@ -4,6 +4,7 @@ var swig = require('swig');
 var bodyParser = require('body-parser');
 var path = require('path');
 var sassMiddleware = require('node-sass-middleware');
+var autoprefixer = require('express-autoprefixer');
 
 var mongo = require('mongodb');
 var monk = require('monk');
@@ -27,6 +28,8 @@ app.use(sassMiddleware({
     prefix: '/css',
     outputStyle: 'compressed'
 }));
+
+app.use(autoprefixer({ browsers: 'last 2 versions', cascade: false }));
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(function(req,res,next){
