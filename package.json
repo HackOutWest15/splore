@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "./node_modules/nodemon/bin/nodemon.js --watch *.js"
+    "watch": "./node_modules/nodemon/bin/nodemon.js --watch ./ -e js,html"
   },
   "repository": {
     "type": "git",
@@ -19,7 +19,12 @@
   },
   "homepage": "https://github.com/HackOutWest15/splore#readme",
   "dependencies": {
-    "express": "^4.13.3"
+    "body-parser": "^1.13.3",
+    "debug": "^2.2.0",
+    "express": "^4.13.3",
+    "mongodb": "^2.0.40",
+    "monk": "^1.0.1",
+    "swig": "^1.4.2"
   },
   "devDependencies": {
     "babel": "^5.8.21",

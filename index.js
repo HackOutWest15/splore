@@ -1,9 +1,17 @@
 var express = require('express');
 var app = express();
+var swig = require('swig');
 
-// respond with "hello world" when a GET request is made to the homepage
+app.engine('html', swig.renderFile);
+
+app.set('view engine', 'html');
+app.set('views', __dirname + '/views');
+
+app.set('view cache', false);
+swig.setDefaults({ cache: false });
+
 app.get('/', function(req, res) {
-  res.send('hello world');
+  res.render('index');
 });
 
 var server = app.listen(3000, function () {
