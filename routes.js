@@ -9,7 +9,7 @@ var Spotify = require('./modules/spotify');
 var checkAuth = function(req, res, next) {
   if(Spotify.client.authed) {
     console.log('authed');
-    res.redirect('/playlist');
+    res.redirect('/playlist/' + Spotify.client.username);
   } else {
     console.log('not authed');
     next();
@@ -48,6 +48,19 @@ router.get('/playlist/:username', function(req, res) {
     res.render('playlist', user);
   });
 });
+
+router.post('/update', function(req, res) {
+  var phoneId = req.query.phoneID;
+  var latitude = req.query.latitude;
+  var longitude = req.query.longitude;
+  var coords = {"lat":latitude, "long":longitude};
+  console.log(req.body);
+
+  Users.findOne({phoneId: phoneId}).then(function(user) {
+    //updatePlaylist(user, coords);
+  })
+
+})
 
 router.get('/callback', function (req, res) {
   
