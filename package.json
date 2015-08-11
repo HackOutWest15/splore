@@ -24,6 +24,7 @@
     "express": "^4.13.3",
     "mongodb": "^2.0.40",
     "monk": "^1.0.1",
+    "querystring": "^0.2.0",
     "swig": "^1.4.2"
   },
   "devDependencies": {
