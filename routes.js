@@ -16,6 +16,8 @@ var generateRandomString = function(length) {
   return text;
 };
 
+var storedState = generateRandomString(16);
+
 router.get('/', function(req, res) {
   res.render('index');
 });
@@ -26,12 +28,23 @@ router.get('/login', function (req, res) {
       response_type: 'code',
       client_id: '9dbef430285b4fe8b11a2dd3e19fbf77',
       redirect_uri: req.protocol + '://' + req.get('Host') + '/callback',
-      state: generateRandomString(16)
+      state: storedState
     }));
 });
 
 router.get('/callback', function (req, res) {
-  // Handle spotify authentication callback
+  
+  var state = req.query.state;
+  var code = req.query.code;
+  
+  if (state === null || state !== storedState) {
+    res.redirect('/#' +
+      querystring.stringify({
+        error: 'state_mismatch'
+      }));
+  } else {
+    // Handle spotify authentication callback
+  }
 });
 
 module.exports = router;
