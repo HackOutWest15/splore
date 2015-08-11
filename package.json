@@ -27,6 +27,7 @@
     "express": "^4.13.3",
     "express-autoprefixer": "^3.3.0",
     "lodash": "^3.10.1",
+    "moment": "^2.10.6",
     "mongodb": "^2.0.40",
     "node-sass-middleware": "^0.9.0",
     "postcss": "^4.1.16",
