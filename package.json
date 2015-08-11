@@ -26,6 +26,7 @@
     "mongodb": "^2.0.40",
     "monk": "^1.0.1",
     "querystring": "^0.2.0",
+    "request": "^2.60.0",
     "swig": "^1.4.2"
   },
   "devDependencies": {

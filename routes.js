@@ -1,5 +1,6 @@
 var router = require('express').Router();
 var querystring = require('querystring');
+var request = require('request');
 
 /**
  * Generates a random string containing numbers and letters
@@ -43,8 +44,28 @@ router.get('/callback', function (req, res) {
         error: 'state_mismatch'
       }));
   } else {
-    // Handle spotify authentication callback
+    var authOptions = {
+      url: 'https://accounts.spotify.com/api/token',
+      form: {
+        code: code,
+        redirect_uri: req.protocol + '://' + req.get('Host') + '/callback',
+        grant_type: 'authorization_code'
+      },
+      headers: {
+        'Authorization': 'Basic ' + (new Buffer(process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET).toString('base64'))
+      },
+      json: true
+    };
+    request.post(authOptions, function (error, response, body) {
+      if (!error && response.statusCode === 200) {
+        // Handle post success
+      } else {
+        // Handle post error
+      }
+    });
   }
+  
+  
 });
 
 module.exports = router;
