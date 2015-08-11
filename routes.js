@@ -26,7 +26,7 @@ router.get('/login', function (req, res) {
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
       response_type: 'code',
-      client_id: '9dbef430285b4fe8b11a2dd3e19fbf77',
+      client_id: process.env.SPOTIFY_CLIENT_ID,
       redirect_uri: req.protocol + '://' + req.get('Host') + '/callback',
       state: storedState
     }));

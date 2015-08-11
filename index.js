@@ -8,6 +8,8 @@ var mongo = require('mongodb');
 var monk = require('monk');
 var db = monk('localhost:27017/splore');
 
+require('dotenv').load();
+
 app.engine('html', swig.renderFile);
 
 app.set('view engine', 'html');
