@@ -1,0 +1,45 @@
+@import "normalize";
+
+html {
+  background-color: #fff;
+  background-image: linear-gradient(rgba(#000, 0), rgba(#000, .7)), url('/images/city.jpg');
+  background-position: center top;
+  background-size: 100%, 120vh;
+  color: #fff;
+  font: normal 16px/1.5 Montserrat, sans-serif;
+  height: 100%;
+}
+
+h1 {
+  font-size: 3rem;
+  font-weight: normal;
+}
+
+.wrapper {
+  text-align: center;
+  margin: 0 auto;
+  width: 90%;
+}
+
+.btn {
+  $color: #3098F3;
+
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+  background-color: $color;
+  font-size: 1.2rem;
+  transition: background-color .15s ease;
+  text-transform: uppercase;
+
+  &:hover {
+    background-color: lighten(saturate($color, 10%), 2%);
+  }
+
+  &--banner {
+    font-size: 1.4rem;
+    width: 100%;
+    padding: .6em 2%;
+    display: block;
+  }
+}

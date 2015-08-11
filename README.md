@@ -5,9 +5,18 @@ Explore music around you based on location, weather, and time of day.
 ## Setup
 
 ```
+brew install mongodb
+sudo mkdir -p /data/db
+sudo chown -R <user> /data
 npm install
-mongod --dbpath ./data
-# New shell
+```
+
+## Run
+
+```
+mongod
+```
+```
 npm run watch
 ```
 
