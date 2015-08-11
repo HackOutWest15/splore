@@ -13,15 +13,16 @@ module.exports = function() {
   }
 
   var map = {};
-  map['max_tempo'] = scaleofhappiness * 500;
-  map['min_tempo'] = scaleofhappiness * 300;
-  map['max_danceability'] = scaleofhappiness;
-  map['min_danceability'] = scaleofhappiness * 0.8;
-  map['max_energy'] = scaleofhappiness;
-  map['min_energy'] = scaleofhappiness * 0.8;
-  map['max_liveness'] = scaleofhappiness;
-  map['min_liveness'] = scaleofhappiness * 0.8;
-  console.log(map);
+
+  map.max_tempo = scaleofhappiness * 500;
+  map.min_tempo = scaleofhappiness * 300;
+  map.max_danceability = scaleofhappiness;
+  map.min_danceability = scaleofhappiness * 0.8;
+  map.max_energy = scaleofhappiness;
+  map.min_energy = scaleofhappiness * 0.8;
+  map.max_liveness = scaleofhappiness;
+  map.min_liveness = scaleofhappiness * 0.8;
+
   return map;
 };
 
