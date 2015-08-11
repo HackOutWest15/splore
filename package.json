@@ -1,0 +1,28 @@
+{
+  "name": "splore",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Explore music around you based on location, weather, and time of day.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "./node_modules/nodemon/bin/nodemon.js --watch *.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HackOutWest15/splore.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/HackOutWest15/splore/issues"
+  },
+  "homepage": "https://github.com/HackOutWest15/splore#readme",
+  "dependencies": {
+    "express": "^4.13.3"
+  },
+  "devDependencies": {
+    "babel": "^5.8.21",
+    "nodemon": "^1.4.0"
+  }
+}
