@@ -6,6 +6,8 @@ Explore music around you based on location, weather, and time of day.
 
 ```
 npm install
+mongod --dbpath ./data
+# New shell
 npm run watch
 ```
 
