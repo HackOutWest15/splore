@@ -27,10 +27,11 @@
     "express-autoprefixer": "^3.3.0",
     "mongodb": "^2.0.40",
     "monk": "^1.0.1",
-    "querystring": "^0.2.0",
-    "request": "^2.60.0",
     "node-sass-middleware": "^0.9.0",
     "postcss": "^4.1.16",
+    "querystring": "^0.2.0",
+    "request": "^2.60.0",
+    "spotify-web-api-node": "^2.1.0",
     "swig": "^1.4.2"
   },
   "devDependencies": {

@@ -1,23 +1,9 @@
 var router = require('express').Router();
 var querystring = require('querystring');
 var request = require('request');
+var utils = require('./utils');
 
-/**
- * Generates a random string containing numbers and letters
- * @param  {number} length The length of the string
- * @return {string} The generated string
- */
-var generateRandomString = function(length) {
-  var text = '';
-  var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-  for (var i = 0; i < length; i++) {
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-  }
-  return text;
-};
-
-var storedState = generateRandomString(16);
+var storedState = Utils.generateRandomString();
 
 router.get('/', function(req, res) {
   res.render('index');
@@ -33,13 +19,17 @@ router.get('/login', function (req, res) {
     }));
 });
 
+router.get('/playlist', function(req, res) {
+  res.render('playlist');
+});
+
 router.get('/callback', function (req, res) {
   
   var state = req.query.state;
   var code = req.query.code;
   
   if (state === null || state !== storedState) {
-    res.redirect('/#' +
+    res.redirect('/' +
       querystring.stringify({
         error: 'state_mismatch'
       }));
@@ -59,6 +49,8 @@ router.get('/callback', function (req, res) {
     request.post(authOptions, function (error, response, body) {
       if (!error && response.statusCode === 200) {
         // Handle post success
+        console.log(body);
+        res.redirect('/playlist');
       } else {
         // Handle post error
       }

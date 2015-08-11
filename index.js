@@ -6,10 +6,6 @@ var path = require('path');
 var sassMiddleware = require('node-sass-middleware');
 var autoprefixer = require('express-autoprefixer');
 
-var mongo = require('mongodb');
-var monk = require('monk');
-var db = monk('localhost:27017/splore');
-
 require('dotenv').load();
 
 app.engine('html', swig.renderFile);
@@ -34,14 +30,8 @@ app.use(sassMiddleware({
 app.use(autoprefixer({ browsers: 'last 2 versions', cascade: false }));
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(function(req,res,next){
-    req.db = db;
-    req.users = db.get('users');
 
-    next();
-});
-
-app.use('/', require('./routes.js'));
+app.use('/', require('./routes'));
 
 var server = app.listen(3000, function () {
   var host = server.address().address;
