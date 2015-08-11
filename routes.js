@@ -1,22 +1,27 @@
 var router = require('express').Router();
 var querystring = require('querystring');
-var request = require('request');
 var Utils = require('./utils');
+var Spotify = require('spotify-web-api-node');
 
 var storedState = Utils.generateRandomString();
+var scopes = ['playlist-modify-public'];
+
+var client;
 
 router.get('/', function(req, res) {
   res.render('index');
 });
 
 router.get('/login', function (req, res) {
-  res.redirect('https://accounts.spotify.com/authorize?' +
-    querystring.stringify({
-      response_type: 'code',
-      client_id: process.env.SPOTIFY_CLIENT_ID,
-      redirect_uri: req.protocol + '://' + req.get('Host') + '/callback',
-      state: storedState
-    }));
+
+  client = new Spotify({
+    clientId: process.env.SPOTIFY_CLIENT_ID,
+    clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+    redirectUri: req.protocol + '://' + req.get('Host') + '/callback'
+  });
+
+  var url = client.createAuthorizeURL(scopes, storedState);
+  res.redirect(url);
 });
 
 router.get('/playlist', function(req, res) {
@@ -34,30 +39,11 @@ router.get('/callback', function (req, res) {
         error: 'state_mismatch'
       }));
   } else {
-    var authOptions = {
-      url: 'https://accounts.spotify.com/api/token',
-      form: {
-        code: code,
-        redirect_uri: req.protocol + '://' + req.get('Host') + '/callback',
-        grant_type: 'authorization_code'
-      },
-      headers: {
-        'Authorization': 'Basic ' + (new Buffer(process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET).toString('base64'))
-      },
-      json: true
-    };
-    request.post(authOptions, function (error, response, body) {
-      if (!error && response.statusCode === 200) {
-        // Handle post success
-        console.log(body);
-        res.redirect('/playlist');
-      } else {
-        // Handle post error
-      }
+    client.authorizationCodeGrant(code).then(function(data) {
+      console.log(data.body);
+      res.redirect('/playlist');
     });
   }
-  
-  
 });
 
 module.exports = router;
