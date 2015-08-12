@@ -74,6 +74,17 @@ var Constructor = function() {
           });
         }
       });
+
+      genrePromise.then(function(location) {
+        console.log(location);
+        var title = 'Splore (' + location.location + ')';
+
+        client.changePlaylistDetails(user.username, user.playlistId, {
+          name: title
+        }).then(function() {
+          console.log('Changed to ' + title);
+        });
+      });
     },
 
     createUser: function(data) {
