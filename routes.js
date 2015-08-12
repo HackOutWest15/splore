@@ -38,12 +38,13 @@ router.post('/users/:username/setPhoneId', function(req, res) {
 
 router.get('/playlist/:username', function(req, res) {
   if(!Spotify.client.authed) {
+    console.log('Not authed, redirecting ..');
     return res.redirect('/');
   }
 
   var username = req.params.username;
-
   Users.findOne({username: username}).then(function(user) {
+    Spotify.updatePlaylist(user, {foo: 'bar'});
     res.render('playlist', user);
   });
 });
