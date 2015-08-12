@@ -1,6 +1,12 @@
 var Spotify = require('spotify-web-api-node');
 var Utils = require('../utils');
+var Promise = require('es6-promise').Promise;
+var _ = require('lodash');
+
+// Modules
 var getSpotifyUris = require('./lookup');
+var getLocationGenres = require('./location');
+var times = require('./momenthandler');
 
 var db = require('promised-mongo')('splore');
 var Users = db.collection('users');
@@ -38,17 +44,35 @@ var Constructor = function() {
     },
 
     updatePlaylist: function(user, coords) {
-      return getSpotifyUris({
-        style: 'metal'
-      }).then(function(uris) {
+      /* coords = {lat, lon} */
+
+      var genrePromise = getLocationGenres(coords);
+      var timesPromise = times();
+
+      Promise.all([genrePromise, timesPromise])
+
+      .then(function(results) {
+        /* 0: location, 1: timeParams */
+
+        return _.extend(results[1], {
+          style: results[0].genres.join(','),
+        });
+      })
+
+      .then(getSpotifyUris)
+
+      .then(function(uris) {
         
         console.log(uris);
 
-        return client.replaceTracksInPlaylist(user.username, user.playlistId, uris).then(function(data) {
-          console.log('success!');
-        }, function(err) {
-          console.error(err);
-        });
+        if(uris.length > 0) {
+          return client.replaceTracksInPlaylist(user.username, user.playlistId, uris)
+          .then(function(data) {
+            console.log('success!');
+          }, function(err) {
+            console.error(err);
+          });
+        }
       });
     },
 

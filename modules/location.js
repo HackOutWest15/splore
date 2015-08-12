@@ -1,7 +1,9 @@
 var Promise = require('es6-promise').Promise;
 var request = require('request');
 
-function getCoordinateData(lat, lon) {
+function getCoordinateData(coords) {
+  var lat = coords.lat,
+      lon = coords.lon;
   
   var googleMapsRequestURL = 'http://maps.googleapis.com/maps/api/geocode/json?sensor=false&language=en&latlng=' +
     lat + ',' +
@@ -44,7 +46,7 @@ function getCoordinateData(lat, lon) {
       }
     });
   });
-    
+
   return promise;
 }
 
@@ -53,11 +55,11 @@ function matchLocationWithGenre(location) {
   // TODO: Expand genres with echonest' similar
   // Observe, hardcoded locations and genres for Hackathon demo purposes
   var locationGenreMap = {
-    'Lorensberg': ['dark progressive house', 'deep house', 'dubstep'],
-    'Inom Vallgraven': ['dark progressive house', 'deep house'],
-    'Johanneberg': ['downtempo', 'alternative rock'],
-    'Heden': ['classic swedish pop'],
-    'Olivedal': ['blues-rock', 'electropunk', 'indie post-punk', 'contemporary jazz', 'deep smooth jazz']
+    'Lorensberg': ['disco house'],
+    'Inom Vallgraven': ['deep house'],
+    'Johanneberg': ['alternative rock'],
+    'Heden': ['swedish pop'],
+    'Olivedal': ['indie']
   };
   
   return {location: location, genres: locationGenreMap[location]};
