@@ -36,6 +36,20 @@ router.post('/users/:username/setPhoneId', function(req, res) {
   });
 });
 
+router.post('/users/:username/updateLocation', function(req, res) {
+  var username = req.params.username;
+  Users.findOne({username: username}).then(function(user) {
+    
+    var lon = req.body.lon;
+    var lat = req.body.lat;
+    
+    Spotify.updatePlaylist(user, {
+      lat: lat,
+      lon: lon
+    });
+  });
+});
+
 router.get('/playlist/:username', function(req, res) {
   if(!Spotify.client.authed) {
     console.log('Not authed, redirecting ..');

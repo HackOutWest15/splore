@@ -15,21 +15,44 @@
   </script>
 
   <script type="text/javascript">
-    // if('Android' in window) {
+    var username = '{{ user.username }}';
+    var http = new XMLHttpRequest();
+    
+    if('Android' in window) {
       var id = Android.getID();
       var henrik = Android.getHenrik();
       Android.startLocationService();
-      var username = '{{ user.username }}';
-      var http = new XMLHttpRequest();
       console.log(henrik);
       var jsonShit = JSON.parse(henrik);
       console.log(jsonShit.lat);
+
       var params = 'phoneId=' + id;
-      
+
       http.open('POST', '/users/' + username + '/setPhoneId', true);
       http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
       http.send(params);
 
-    // }
+    } else {
+      
+      if(navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+      } else {
+        console.log('Failed to send geolocation')
+      }
+      
+      function sendLocation(position) {
+          var lat = position.coords.latitude;
+          var lon = position.coords.longitude;
+          
+          var params = 'lon=' + lon +
+            "lat="+ lat;
+          
+          http.open('POST', '/users/' + username + '/updateLocation', true);
+          http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+          http.send(params);
+          
+      }
+      
+    }
   </script>
 {% endblock %}
