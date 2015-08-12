@@ -2,7 +2,7 @@ var Spotify = require('spotify-web-api-node');
 var Utils = require('../utils');
 var getSpotifyUris = require('./lookup');
 
-var db = require('promised-mongo')('splore');
+var db = require('promised-mongo')(process.env.DB_CONNECTION);
 var Users = db.collection('users');
 
 var storedState = Utils.generateRandomString();
