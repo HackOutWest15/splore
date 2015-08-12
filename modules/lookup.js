@@ -22,6 +22,9 @@ function searchEchoNest(params){
     api_key: process.env.ECHONEST_API_KEY
   });
 
+  console.log('Searching for ..')
+  console.log(params);
+
   var promise = new Promise(function(resolve, reject) {
     request.get({
       url: echoNestURL,
@@ -31,6 +34,7 @@ function searchEchoNest(params){
       if(err) {
         reject(err);
       } else {
+
         var tracks = res.body.response.songs.map(function(track) {
           return {
             title: track.title,

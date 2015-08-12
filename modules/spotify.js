@@ -7,6 +7,7 @@ var _ = require('lodash');
 var getSpotifyUris = require('./lookup');
 var getLocationGenres = require('./location');
 var times = require('./momenthandler');
+var getWeather = require('./weatherhandler');
 
 var db = require('promised-mongo')('splore');
 var Users = db.collection('users');
@@ -48,21 +49,21 @@ var Constructor = function() {
 
       var genrePromise = getLocationGenres(coords);
       var timesPromise = times();
+      var weatherPromise = getWeather(coords.lat, coords.lon);
 
-      Promise.all([genrePromise, timesPromise])
+      Promise.all([genrePromise, timesPromise, weatherPromise])
 
       .then(function(results) {
-        /* 0: location, 1: timeParams */
+        /* 0: location, 1: timeParams, 2: weatherParam */
         return _.extend(results[1], {
           style: results[0].genres.join(','),
+          mood: results[2]
         });
       })
 
       .then(getSpotifyUris)
 
       .then(function(uris) {
-        
-        console.log(uris);
 
         if(uris.length > 0) {
           return client.replaceTracksInPlaylist(user.username, user.playlistId, uris)
