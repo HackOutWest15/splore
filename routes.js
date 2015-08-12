@@ -20,7 +20,7 @@ router.get('/', function(req, res) {
   res.render('index');
 });
 
-router.get('/login', checkAuth, function (req, res) {
+router.get('/login', function (req, res) {
   res.redirect(Spotify.auth());
 });
 
