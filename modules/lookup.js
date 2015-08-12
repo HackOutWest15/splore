@@ -17,8 +17,13 @@ function searchEchoNest(params){
 
   _.extend(params, {
     format: 'json',
+    results: 100,
+    sort: 'song_hotttnesss-desc',
     api_key: process.env.ECHONEST_API_KEY
   });
+
+  console.log('Searching for ..')
+  console.log(params);
 
   var promise = new Promise(function(resolve, reject) {
     request.get({
@@ -29,8 +34,15 @@ function searchEchoNest(params){
       if(err) {
         reject(err);
       } else {
-        var tracks = _.uniq(_.pluck(res.body.response.songs, 'title'));
-        resolve(tracks);
+
+        var tracks = res.body.response.songs.map(function(track) {
+          return {
+            title: track.title,
+            artist: track.artist_name
+          };
+        });
+
+        resolve(_.uniq(tracks, 'artist'));
       }
     });
   });
@@ -40,7 +52,7 @@ function searchEchoNest(params){
 
 function searchSpotify(songs) {
   if(!Array.isArray(songs)) {
-    throw new Error('Songs must be an array of song titles!');
+    throw new Error('Songs must be an array!');
   }
 
   var params = {
@@ -49,9 +61,15 @@ function searchSpotify(songs) {
     limit: 1
   };
 
-  function sendReq(songTitle) {
+  function buildQuery(track) {
+    return 'artist:' + track.artist + ' track:' + track.title;
+  }
+
+  function sendReq(track) {
     return new Promise(function(resolve, reject) {
-      var query = _.extend({}, params, { q: songTitle})
+
+      var query = _.extend({}, params, { q: buildQuery(track)});
+
       request({
         url: spotifyURL,
         qs: query,
@@ -60,6 +78,7 @@ function searchSpotify(songs) {
         if(err) { 
           reject(err); 
         } else {
+
           if(res.body.tracks && res.body.tracks.items.length > 0) {
             resolve(res.body.tracks.items[0].uri);
           } else {
