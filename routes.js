@@ -61,13 +61,14 @@ router.get('/playlist/:username', function(req, res) {
 
 router.post('/update', function(req, res) {
   var phoneId = req.body.phoneID;
+
   var coords = {
     lat: req.body.latitude,
     lon: req.body.longitude
   };
 
   Users.findOne({phoneId: phoneId}).then(function(user) {
-    //updatePlaylist(user, coords);
+    Spotify.updatePlaylist(user, coords);
   })
 
 })
