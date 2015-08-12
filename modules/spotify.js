@@ -9,7 +9,7 @@ var getLocationGenres = require('./location');
 var times = require('./momenthandler');
 var getWeather = require('./weatherhandler');
 
-var db = require('promised-mongo')('splore');
+var db = require('promised-mongo')(process.env.DB_CONNECTION);
 var Users = db.collection('users');
 
 var storedState = Utils.generateRandomString();
@@ -23,7 +23,7 @@ var Constructor = function() {
       client = new Spotify({
         clientId: process.env.SPOTIFY_CLIENT_ID,
         clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-        redirectUri: 'http://localhost:3000/callback'
+        redirectUri: process.env.ROOT + '/callback'
       });
     }
   };

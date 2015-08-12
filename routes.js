@@ -1,7 +1,7 @@
 var router = require('express').Router();
 var querystring = require('querystring');
 
-var db = require('promised-mongo')('splore');
+var db = require('promised-mongo')(process.env.DB_CONNECTION);
 var Users = db.collection('users');
 
 var Spotify = require('./modules/spotify');
