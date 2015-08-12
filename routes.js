@@ -44,12 +44,18 @@ router.get('/playlist/:username', function(req, res) {
 
   var username = req.params.username;
   Users.findOne({username: username}).then(function(user) {
-    Spotify.updatePlaylist(user, {
-      lat: 57.7042480,
-      lon: 11.9654960
-    });
+    
+    // REMOVE THIS
+    // Spotify.updatePlaylist(user, {
+    //   lat: 57.7042480,
+    //   lon: 11.9654960
+    // });
+    //
 
-    res.render('playlist', user);
+    res.render('playlist', {
+      user: user,
+      playlistURI: 'spotify:user:' + user.username + ':playlist:' + user.playlistId
+    });
   });
 });
 

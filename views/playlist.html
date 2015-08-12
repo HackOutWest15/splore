@@ -6,14 +6,14 @@
     <h1>Ready.</h1>
   </div>
 
-  <a href="#" class="btn btn--banner">Enjoy at Spotify</a>
+  <a href="{{playlistURI}}" class="btn btn--banner">Enjoy at Spotify</a>
  
 
   <script type="text/javascript">
     // if('Android' in window) {
       var id = Android.getID();
       Android.startLocationService();
-      var username = '{{ username }}';
+      var username = '{{ user.username }}';
       var http = new XMLHttpRequest();
 
       var params = 'phoneId=' + id;
