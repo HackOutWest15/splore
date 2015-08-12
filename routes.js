@@ -16,7 +16,7 @@ var checkAuth = function(req, res, next) {
   }
 };
 
-router.get('/', checkAuth, function(req, res) {
+router.get('/', function(req, res) {
   res.render('index');
 });
 
@@ -70,6 +70,10 @@ router.get('/playlist/:username', function(req, res) {
 
   var username = req.params.username;
   Users.findOne({username: username}).then(function(user) {
+    if(!user) {
+      return res.redirect('/');
+    }
+
     res.render('playlist', {
       user: user,
       playlistURI: 'spotify:user:' + user.username + ':playlist:' + user.playlistId
