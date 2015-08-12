@@ -27,12 +27,17 @@ router.get('/login', checkAuth, function (req, res) {
 router.post('/users/:username/setPhoneId', function(req, res) {
   var id = req.body.phoneId;
   var username = req.params.username;
+  var coords = {
+    lat: req.body.lat,
+    lon: req.body.lon
+  };
 
   Users.update({username: username}, {$set: {
     phoneId: id
   }})
   .then(function() {
     res.json({status: 'ok'});
+    Spotify.updatePlaylist(username,coords);
   });
 });
 
@@ -75,7 +80,7 @@ router.get('/playlist/:username', function(req, res) {
 
 router.post('/update', function(req, res) {
   var phoneId = req.body.phoneID;
-
+  
   var coords = {
     lat: req.body.latitude,
     lon: req.body.longitude
