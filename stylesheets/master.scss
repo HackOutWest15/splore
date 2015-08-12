@@ -10,6 +10,10 @@ html {
   height: 100%;
 }
 
+html.blurred {
+  background-image: linear-gradient(rgba(#000, 0), rgba(#000, .7)), url('/images/city-blurred.jpg');
+}
+
 h1 {
   font-size: 3rem;
   font-weight: normal;
@@ -43,4 +47,40 @@ h1 {
     display: block;
     margin: .5rem 0;
   }
+}
+
+@keyframes AnimateUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 40px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes AnimateDown {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -20px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.animate--up {
+  opacity: 0;
+  transform: translate3d(0, 40px, 0);
+  animation: AnimateUp .6s .8s ease forwards;
+}
+
+.animate--down {
+  opacity: 0;
+  transform: translate3d(0, -20px, 0);
+  animation: AnimateDown .6s .2s ease forwards;
 }
