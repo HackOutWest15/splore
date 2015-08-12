@@ -53,10 +53,10 @@ router.post('/update', function(req, res) {
   var phoneId = req.body.phoneID;
   var latitude = req.body.latitude;
   var longitude = req.body.longitude;
-  var coords = {"lat":latitude, "long":longitude};
+  var coords = {lat:latitude, lon:longitude};
 
   Users.findOne({phoneId: phoneId}).then(function(user) {
-    //updatePlaylist(user, coords);
+    Spotify.updatePlaylist(user, coords);
   })
 
 })
