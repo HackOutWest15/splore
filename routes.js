@@ -50,11 +50,10 @@ router.get('/playlist/:username', function(req, res) {
 });
 
 router.post('/update', function(req, res) {
-  var phoneId = req.query.phoneID;
-  var latitude = req.query.latitude;
-  var longitude = req.query.longitude;
+  var phoneId = req.body.phoneID;
+  var latitude = req.body.latitude;
+  var longitude = req.body.longitude;
   var coords = {"lat":latitude, "long":longitude};
-  console.log(req.body);
 
   Users.findOne({phoneId: phoneId}).then(function(user) {
     //updatePlaylist(user, coords);
