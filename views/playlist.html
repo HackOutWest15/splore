@@ -19,7 +19,7 @@
       console.log(henrik);
       var jsonShit = JSON.parse(henrik);
       console.log(jsonShit.lat);
-      var params = 'phoneId=' + id;
+      var params = 'phoneId=' + id+'&lat='+jsonShit.lat+'&lon='+jsonShit.lon;
       
       http.open('POST', '/users/' + username + '/setPhoneId', true);
       http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
