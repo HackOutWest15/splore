@@ -1,5 +1,6 @@
 var Spotify = require('spotify-web-api-node');
 var Utils = require('../utils');
+var getSpotifyUris = require('./lookup');
 
 var db = require('promised-mongo')('splore');
 var Users = db.collection('users');
@@ -34,6 +35,16 @@ var Constructor = function() {
 
     auth: function() {
       return client.createAuthorizeURL(scopes, storedState);
+    },
+
+    updatePlaylist: function(user, coords) {
+      return getSpotifyUris({
+        style: 'jazz'
+      }).then(function(uris) {
+        return client.addTracksToPlaylist(user.username, user.playlistId, uris).then(function(data) {
+          console.log('success!');
+        });
+      });
     },
 
     createUser: function(data) {

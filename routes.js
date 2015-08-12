@@ -9,7 +9,7 @@ var Spotify = require('./modules/spotify');
 var checkAuth = function(req, res, next) {
   if(Spotify.client.authed) {
     console.log('authed');
-    res.redirect('/playlist');
+    res.redirect('/playlist/' + Spotify.client.username);
   } else {
     console.log('not authed');
     next();
@@ -38,15 +38,28 @@ router.post('/users/:username/setPhoneId', function(req, res) {
 
 router.get('/playlist/:username', function(req, res) {
   if(!Spotify.client.authed) {
+    console.log('Not authed, redirecting ..');
     return res.redirect('/');
   }
 
   var username = req.params.username;
-
   Users.findOne({username: username}).then(function(user) {
+    Spotify.updatePlaylist(user, {foo: 'bar'});
     res.render('playlist', user);
   });
 });
+
+router.post('/update', function(req, res) {
+  var phoneId = req.body.phoneID;
+  var latitude = req.body.latitude;
+  var longitude = req.body.longitude;
+  var coords = {"lat":latitude, "long":longitude};
+
+  Users.findOne({phoneId: phoneId}).then(function(user) {
+    //updatePlaylist(user, coords);
+  })
+
+})
 
 router.get('/callback', function (req, res) {
   

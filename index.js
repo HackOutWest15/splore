@@ -6,6 +6,8 @@ var path = require('path');
 var sassMiddleware = require('node-sass-middleware');
 var autoprefixer = require('express-autoprefixer');
 
+var location = require('./modules/location');
+
 require('dotenv').load();
 
 app.engine('html', swig.renderFile);
