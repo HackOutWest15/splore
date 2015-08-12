@@ -36,8 +36,13 @@ router.post('/users/:username/setPhoneId', function(req, res) {
     phoneId: id
   }})
   .then(function() {
+    return Users.findOne({username: username});
+  })
+  .then(function(user) {
+    return Spotify.updatePlaylist(user, coords);
+  })
+  .then(function() {
     res.json({status: 'ok'});
-    Spotify.updatePlaylist(username,coords);
   });
 });
 
