@@ -63,11 +63,6 @@ router.post('/users/:username/updateLocation', function(req, res) {
 });
 
 router.get('/playlist/:username', function(req, res) {
-  if(!Spotify.client.authed) {
-    console.log('Not authed, redirecting ..');
-    return res.redirect('/');
-  }
-
   var username = req.params.username;
   Users.findOne({username: username}).then(function(user) {
     if(!user) {
