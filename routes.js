@@ -80,7 +80,7 @@ router.get('/playlist/:username', function(req, res) {
 
     res.render('playlist', {
       user: user,
-      playlistURI: 'https://open.spotify.com/user/' + user.username + '/playlist/' + user.playlistId
+      playlistURI: 'spotify:user:' + user.username + ':playlist:' + user.playlistId
     });
   });
 });
