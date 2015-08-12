@@ -6,6 +6,8 @@ var path = require('path');
 var sassMiddleware = require('node-sass-middleware');
 var autoprefixer = require('express-autoprefixer');
 
+var location = require('./modules/location');
+
 require('dotenv').load();
 
 app.engine('html', swig.renderFile);
@@ -33,7 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', require('./routes'));
 
-var server = app.listen(3000, function () {
+var server = app.listen(process.env.PORT || 3000, function () {
   var host = server.address().address;
   var port = server.address().port;
 

@@ -1,7 +1,7 @@
 var router = require('express').Router();
 var querystring = require('querystring');
 
-var db = require('promised-mongo')('splore');
+var db = require('promised-mongo')(process.env.DB_CONNECTION);
 var Users = db.collection('users');
 
 var Spotify = require('./modules/spotify');
@@ -44,16 +44,33 @@ router.get('/playlist/:username', function(req, res) {
 
   var username = req.params.username;
   Users.findOne({username: username}).then(function(user) {
-    Spotify.updatePlaylist(user, {foo: 'bar'});
-    res.render('playlist', user);
+    
+    // REMOVE THIS
+    // Spotify.updatePlaylist(user, {
+    //   lat: 57.7042480,
+    //   lon: 11.9654960
+    // });
+    //
+
+    res.render('playlist', {
+      user: user,
+      playlistURI: 'spotify:user:' + user.username + ':playlist:' + user.playlistId
+    });
   });
 });
 
 router.post('/update', function(req, res) {
   var phoneId = req.body.phoneID;
+<<<<<<< HEAD
   var latitude = req.body.latitude;
   var longitude = req.body.longitude;
   var coords = {lat:latitude, lon:longitude};
+=======
+  var coords = {
+    lat: req.body.latitude,
+    lon: req.body.longitude
+  };
+>>>>>>> a788b0f3f4018ba46c906300b3ab07a93bdbd17c
 
   Users.findOne({phoneId: phoneId}).then(function(user) {
     Spotify.updatePlaylist(user, coords);

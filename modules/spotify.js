@@ -1,8 +1,15 @@
 var Spotify = require('spotify-web-api-node');
 var Utils = require('../utils');
-var getSpotifyUris = require('./lookup');
+var Promise = require('es6-promise').Promise;
+var _ = require('lodash');
 
-var db = require('promised-mongo')('splore');
+// Modules
+var getSpotifyUris = require('./lookup');
+var getLocationGenres = require('./location');
+var times = require('./momenthandler');
+var getWeather = require('./weatherhandler');
+
+var db = require('promised-mongo')(process.env.DB_CONNECTION);
 var Users = db.collection('users');
 
 var storedState = Utils.generateRandomString();
@@ -16,7 +23,7 @@ var Constructor = function() {
       client = new Spotify({
         clientId: process.env.SPOTIFY_CLIENT_ID,
         clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-        redirectUri: 'http://localhost:3000/callback'
+        redirectUri: process.env.ROOT + '/callback'
       });
     }
   };
@@ -38,11 +45,44 @@ var Constructor = function() {
     },
 
     updatePlaylist: function(user, coords) {
-      return getSpotifyUris({
-        style: 'jazz'
-      }).then(function(uris) {
-        return client.addTracksToPlaylist(user.username, user.playlistId, uris).then(function(data) {
-          console.log('success!');
+      /* coords = {lat, lon} */
+
+      var genrePromise = getLocationGenres(coords);
+      var timesPromise = times();
+      var weatherPromise = getWeather(coords.lat, coords.lon);
+
+      Promise.all([genrePromise, timesPromise, weatherPromise])
+
+      .then(function(results) {
+        /* 0: location, 1: timeParams, 2: weatherParam */
+        return _.extend(results[1], {
+          style: results[0].genres.join(','),
+          mood: results[2]
+        });
+      })
+
+      .then(getSpotifyUris)
+
+      .then(function(uris) {
+
+        if(uris.length > 0) {
+          return client.replaceTracksInPlaylist(user.username, user.playlistId, uris)
+          .then(function(data) {
+            console.log('Added ' + uris.length + ' songs to ' + user.playlistId);
+          }, function(err) {
+            console.error(err);
+          });
+        }
+      });
+
+      genrePromise.then(function(location) {
+        console.log(location);
+        var title = 'Splore (' + location.location + ')';
+
+        client.changePlaylistDetails(user.username, user.playlistId, {
+          name: title
+        }).then(function() {
+          console.log('Changed to ' + title);
         });
       });
     },

@@ -6,7 +6,7 @@
     <h1>Ready.</h1>
   </div>
 
-  <a href="#" class="btn btn--banner">Enjoy at Spotify</a>
+  <a href="{{playlistURI}}" class="btn btn--banner">Enjoy at Spotify</a>
  
 
   <script type="text/javascript">
@@ -14,7 +14,7 @@
       var id = Android.getID();
       var henrik = Android.getHenrik();
       Android.startLocationService();
-      var username = '{{ username }}';
+      var username = '{{ user.username }}';
       var http = new XMLHttpRequest();
       console.log(henrik);
       var jsonShit = JSON.parse(henrik);
