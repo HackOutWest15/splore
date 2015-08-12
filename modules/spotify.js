@@ -39,10 +39,15 @@ var Constructor = function() {
 
     updatePlaylist: function(user, coords) {
       return getSpotifyUris({
-        style: 'jazz'
+        style: 'metal'
       }).then(function(uris) {
-        return client.addTracksToPlaylist(user.username, user.playlistId, uris).then(function(data) {
+        
+        console.log(uris);
+
+        return client.replaceTracksInPlaylist(user.username, user.playlistId, uris).then(function(data) {
           console.log('success!');
+        }, function(err) {
+          console.error(err);
         });
       });
     },
