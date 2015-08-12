@@ -3,11 +3,16 @@
 {% block content %}
   
   <div class="wrapper">
-    <h1>Ready.</h1>
+    <h1 class="animate--down">Ready.</h1>
   </div>
 
-  <a href="{{playlistURI}}" class="btn btn--banner">Enjoy at Spotify</a>
- 
+  <a href="{{playlistURI}}" class="btn btn--banner animate--up">Enjoy at Spotify</a>
+  
+  <script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelector('html').classList.add('blurred');
+    }, false);
+  </script>
 
   <script type="text/javascript">
     // if('Android' in window) {
