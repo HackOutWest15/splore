@@ -22,9 +22,6 @@ function searchEchoNest(params){
     api_key: process.env.ECHONEST_API_KEY
   });
 
-  console.log('Searching echonest for')
-  console.log(params);
-
   var promise = new Promise(function(resolve, reject) {
     request.get({
       url: echoNestURL,
@@ -40,8 +37,6 @@ function searchEchoNest(params){
             artist: track.artist_name
           };
         });
-
-        console.log(_.uniq(tracks, 'artist'))
 
         resolve(_.uniq(tracks, 'artist'));
       }

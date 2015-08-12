@@ -53,7 +53,6 @@ var Constructor = function() {
 
       .then(function(results) {
         /* 0: location, 1: timeParams */
-
         return _.extend(results[1], {
           style: results[0].genres.join(','),
         });
@@ -68,7 +67,7 @@ var Constructor = function() {
         if(uris.length > 0) {
           return client.replaceTracksInPlaylist(user.username, user.playlistId, uris)
           .then(function(data) {
-            console.log('success!');
+            console.log('Added ' + uris.length + ' songs to ' + user.playlistId);
           }, function(err) {
             console.error(err);
           });
