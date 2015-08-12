@@ -48,10 +48,12 @@ router.post('/users/:username/updateLocation', function(req, res) {
     var lon = req.body.lon;
     var lat = req.body.lat;
     
-    Spotify.updatePlaylist(user, {
+    return Spotify.updatePlaylist(user, {
       lat: lat,
       lon: lon
     });
+  }).then(function() {
+    res.json({status: 'ok'});
   });
 });
 
