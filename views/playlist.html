@@ -42,7 +42,7 @@
           var lon = position.coords.longitude;
           
           var params = 'lon=' + lon +
-            "lat="+ lat;
+            "&lat="+ lat;
           
           http.open('POST', '/users/' + username + '/updateLocation', true);
           http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
